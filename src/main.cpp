@@ -1,4 +1,6 @@
 #include "ardrone/ardrone.h"
+using namespace std;
+using namespace cv;
 
 // --------------------------------------------------------------------------
 // main(Number of arguments, Argument values)
@@ -7,6 +9,7 @@
 // --------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
+    /*
     // AR.Drone class
     ARDrone ardrone;
 
@@ -76,6 +79,6 @@ int main(int argc, char *argv[])
 
     // See you
     ardrone.close();
-
+    */
     return 0;
 }
