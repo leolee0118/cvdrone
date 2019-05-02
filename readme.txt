@@ -1,3 +1,7 @@
+***NCTU_autopilot_2019spring_team6
+1. normally, 'q' for quit while testing camera.
+2. remember to safe new .cpp files in program/ , feel free to cover src/main.cpp when testing any .cpp files.
+
 -----------------------------------------------------------------
  CV Drone (= OpenCV + AR.Drone)
  Copyright (C) 2016 puku0x
