@@ -9,13 +9,13 @@ int main(int argc, char *argv[]) {
         cout << "Failed to initialize." << std::endl;
         return -1;
     }
-    cout << "Opened."
-    cout << "Battery " << ardrone.getBatteryPercentage() << "[%]" << std::endl;
+    cout << "Opened.";
+    cout << "Battery " << ardrone.getBatteryPercentage() << "[%]" << endl;
 
     int cnt;
-    FileStorage fs("image_counter", FileStorage::READ);
+    FileStorage fs("counter.xml", FileStorage::READ);
     if (!fs.isOpened()) cnt = 1;
-    else fs["count"] >> cnt;
+    else fs["img_count"] >> cnt;
     while (true) {
         Mat img = ardrone.getImage();
         imshow("Press Space to capture.", img);
@@ -24,9 +24,7 @@ int main(int argc, char *argv[]) {
             string filename = "./calibration_image/img_" + to_string(cnt++) + ".jpg";
             imwrite(filename, img);
             cout << filename << '\n';
-        } else if (key == 'q') {
-            fs << "count" << cnt;
-            break;
+            fs << "img_count" << cnt;
         }
     }
     fs.release();

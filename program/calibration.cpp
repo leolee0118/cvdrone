@@ -14,17 +14,17 @@ private:
     vector<vector<Point3f> > dstPoints;
     vector<vector<Point2f> > srcPoints;
 public:
-    void setFileNames() {
+    void setFileNames(int ccnt, int icnt) {
+        cal_cnt = ccnt;
+        img_cnt = icnt;
         filenames.clear();
         for (int i = 1; i < img_cnt; i++) {
             string fname = "./calibration_image/img_" + to_string(i) + ".jpg";
             filenames.push_back(fname);
         }
     }
-    void setBorderSizeAndCounts(const Size &bsize, int ccnt, int icnt) {
+    void setBorderSizeAndCount(const Size &bsize) {
         borderSize = bsize;
-        cal_cnt = ccnt;
-        img_cnt = icnt;
     }
     void addBoardPoints() {
         vector<Point3f> dstCorners;
@@ -94,11 +94,12 @@ int main() {
     } else {
         fs["calibration_count"] >> cal_cnt;
         fs["image_count"] >> img_cnt;
+        // fs << "calibration_count" << cal_cnt + 1;
     }
 
     CameraCalibrator cc;
-    cc.setFileNames();
-    cc.setBorderSizeAndCount(Size(5, 7), cal_cnt);
+    cc.setFileNames(cal_cnt, img_cnt);
+    cc.setBorderSizeAndCount(Size(5, 7));
     cc.addBoardPoints();
 
     while (true) {
@@ -108,10 +109,6 @@ int main() {
         // cc.fsWrite(src);
         imshow("src", src);
         imshow("dst", dst);
-        int key = waitKey(33);
-        if (key == 'q') {
-            cal_cnt++;
-            break;
-        }
+        waitKey(33);
     }
 }
