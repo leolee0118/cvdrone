@@ -14,54 +14,22 @@ using namespace cv::aruco;
 
 int main(int argc, char *argv[])
 {
-    // AR.Drone class
-    // ARDrone ardrone;
+    ARDrone ardrone;
+    if (!ardrone.open()) {
+        cout << "Failed to initialize." << std::endl;
+        return -1;
+    }
+    cout << "Battery = " << ardrone.getBatteryPercentage() << "[%]" << std::endl;
 
-    // // Initialize
-    // if (!ardrone.open()) {
-    //     std::cout << "Failed to initialize." << std::endl;
-    //     return -1;
-    // }
-
-    // // Battery
-    // std::cout << "Battery = " << ardrone.getBatteryPercentage() << "[%]" << std::endl;
-
-    // Instructions
-    std::cout << "***************************************" << std::endl;
-    std::cout << "*       CV Drone sample program       *" << std::endl;
-    std::cout << "*           - How to play -           *" << std::endl;
-    std::cout << "***************************************" << std::endl;
-    std::cout << "*                                     *" << std::endl;
-    std::cout << "* - Controls -                        *" << std::endl;
-    std::cout << "*    'Space' -- Takeoff/Landing       *" << std::endl;
-    std::cout << "*    'Up'    -- Move forward          *" << std::endl;
-    std::cout << "*    'Down'  -- Move backward         *" << std::endl;
-    std::cout << "*    'Left'  -- Turn left             *" << std::endl;
-    std::cout << "*    'Right' -- Turn right            *" << std::endl;
-    std::cout << "*    'Q'     -- Move upward           *" << std::endl;
-    std::cout << "*    'A'     -- Move downward         *" << std::endl;
-    std::cout << "*                                     *" << std::endl;
-    std::cout << "* - Others -                          *" << std::endl;
-    std::cout << "*    'C'     -- Change camera         *" << std::endl;
-    std::cout << "*    'Esc'   -- Exit                  *" << std::endl;
-    std::cout << "*                                     *" << std::endl;
-    std::cout << "***************************************" << std::endl;
-
-    double _x[3] = {1, 0, 0};
-    double _y[3] = {1, 0, 0};
-    double _z[3] = {1, 0, 0};
-    double _r[3] = {1, 0, 0};
-    Mat x(3, 1, CV_64F, _x), y(3, 1, CV_64F, _y), z(3, 1, CV_64F, _z), r(3, 1, CV_64F, _r);
-    PIDManager pid(x, y, z, r);
     while (true) {
         Mat img;
         img = ardrone.getImage();
-        waitKey(33);
+        
         Mat intrinsic, distortion;
+        Mat mapx, mapy;
         FileStorage fs("calibration.xml", FileStorage::READ);
         fs["intrinsic"] >> intrinsic;
-        fs["distortion"] >> distortion;
-        Mat mapx, mapy; 
+        fs["distortion"] >> distortion; 
         initUndistortRectifyMap(intrinsic, distortion, Mat(), intrinsic, img.size(), CV_32F, mapx, mapy);
         remap(img, img, mapx, mapy, INTER_LINEAR);
 
@@ -78,6 +46,7 @@ int main(int argc, char *argv[])
                 cout << tvecs[i] << '\n'; //水平、垂直、遠近
             }
             imshow("test", img);
+            waitKey(33);
         }
     }
     // while (1) {

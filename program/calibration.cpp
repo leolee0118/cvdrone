@@ -54,9 +54,9 @@ public:
         Mat cameraMatrix; // 內部參數
         Mat distMatrix; //畸變參數
         Mat mapx, mapy;
-        vector<Mat> rvecs, tvecs; // rotation, tranlation of each image.
+        vector<Mat> rvecs, tvecs; // rotation, translation of each image.
         calibrateCamera(dstPoints, srcPoints, imgSize, cameraMatrix, distMatrix, rvecs, tvecs);
-        initUndistortRectifyMap(cameraMatrix, distMatrix, Mat(), cameraMatrix, imgSize, CV_32F, mapx, mapy);;
+        initUndistortRectifyMap(cameraMatrix, distMatrix, Mat(), cameraMatrix, imgSize, CV_32F, mapx, mapy);
         remap(src, dst, mapx, mapy, INTER_LINEAR);
 
         string filename = "calibration_" + to_string(cal_cnt) + ".xml";
