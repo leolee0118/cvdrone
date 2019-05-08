@@ -105,5 +105,3 @@ double PIDManager::getCurrentTime() {
 #endif
 	return t;
 }
-
-
