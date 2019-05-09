@@ -56,6 +56,7 @@ void PIDManager::setCoeffs(Mat& _X, Mat& _Y, Mat& _Z, Mat& _R) {
 }
 
 void PIDManager::getCommand(Mat& _error, Mat& _output) {
+    int tmp = 4;
 	/*
 	 *	Input format : 	Mat(4, 1, CV_64F)
 	 *		which stands for _error(x_error, y_error, z_error, r_error)
@@ -63,18 +64,18 @@ void PIDManager::getCommand(Mat& _error, Mat& _output) {
 	 *		which stands for _output(x_out, y_out, z_out, r_out)
 	 */
 	double dt = (getCurrentTime() - previous_time) / 1000.; // in "sec" unit
-	Mat de = Mat::zeros(4, 1, CV_64F);
-	Mat output = Mat::zeros(4, 1, CV_64F);
+	Mat de = Mat::zeros(tmp, 1, CV_64F);
+	Mat output = Mat::zeros(tmp, 1, CV_64F);
 	if(mInit) {
-		for(int i = 0; i < 4; i++) {
+		for(int i = 0; i < tmp; i++) {
 			// de
 			de.at<double>(i, 0) = (_error.at<double>(i, 0) - previous_error.at<double>(i, 0)) / dt;
 			error_integral.at<double>(i, 0) += de.at<double>(i, 0) * dt;
 			// output
 			Mat coeffs;
-			if(i == 0) 	coeffs = mX;
-			else if(i == 1)	coeffs = mY;
-			else if(i == 2) coeffs = mZ;
+			if(i == 0) 	coeffs = mY;
+			else if(i == 1)	coeffs = mZ;
+			else if(i == 2) coeffs = mX;
 			else 		coeffs = mR;
 			//cout << endl << i << endl;
 			//cout << coeffs << endl;
