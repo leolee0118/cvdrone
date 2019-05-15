@@ -1,5 +1,6 @@
 #include "ardrone/ardrone.h"
 #include <opencv2/aruco.hpp>
+#include <cmath> 
 using namespace std;
 using namespace cv;
 using namespace cv::aruco;
@@ -93,7 +94,7 @@ int main(int argc, char *argv[])
     cout << "Battery = " << ardrone.getBatteryPercentage() << "[%]" << endl;
         
     double _x[3] = {2.5, 0.3, 0.7};
-    double _y[3] = {2.5, 0.3, 0.7};
+    double _y[3] = {0, 0, 0};
     double _z[3] = {2.5, 0.3, 0.2};
     double _r[3] = {2.5, 0.3, 0.2};
     Mat x(3, 1, CV_64F, _x), y(3, 1, CV_64F, _y), z(3, 1, CV_64F, _z), r(3, 1, CV_64F, _r);
@@ -111,7 +112,7 @@ int main(int argc, char *argv[])
     while (true) {
         Mat img = ardrone.getImage();
         imshow("original", img);
-        int key = waitKey(300);
+        int key = waitKey(50);
 
         if (key == ' ') {
             if (ardrone.onGround()) ardrone.takeoff();
@@ -161,10 +162,10 @@ int main(int argc, char *argv[])
                 cout << command.at<double>(0, 0) << ' ';
                 cout << command.at<double>(1, 0) << ' ';
                 cout << command.at<double>(3, 0) << ' ';
-                ardrone.move3D(command.at<double>(2, 0), -command.at<double>(0, 0), command.at<double>(1, 0), 0);
+                ardrone.move3D(command.at<double>(2, 0) / 100, 0, -command.at<double>(1, 0) / 100, 0);
+                // ardrone.move3D(0, -command.at<double>(0, 0) / 200, 0, 0);
             }
         }
-
     }
 
     return 0;
